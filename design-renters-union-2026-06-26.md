@@ -6,6 +6,12 @@
 
 ---
 
+## Vision
+
+Renters have never had access to the same quality of market intelligence that landlords use every day. The mission of Renters Commons is to build a public-interest housing intelligence platform that gives every renter access to transparent pricing data, negotiation tools, and community knowledge — so they can make informed housing decisions.
+
+---
+
 ## The Problem
 
 Landlords have algorithmic pricing tools — RealPage, YieldStar — that aggregate actual occupancy and rent data across competing properties to maximize extraction. The DOJ sued RealPage. New York became the first state to ban algorithmic rent-setting tools (S.7882, late 2025). Portland and Washington State are following. These tools cost renters an estimated $70/month average nationally.
@@ -38,9 +44,23 @@ The instinct that led to the non-profit decision is correct: renters will share 
 
 3. **Chicago is the wedge city.** NYC already has StreetEasy, Openigloo, and the country's strongest tenant protections. Chicago has almost nothing. The founder has 2 months of real data there.
 
-4. **The AI negotiation layer is the secret sauce.** What converts data into "$200/month saved." Data without AI is just another table of numbers.
+4. **The AI layer produces intelligence, not letters.** The output is not "here's your negotiation letter." It's: *"Your building has increased vacancy from 3 to 11 units in the last 28 days. Similar units are now listed for $187 less. The leasing office has added two concessions. Ask for: $175 reduction, waived renewal fee, reserved parking, 14-month lease."* That's market intelligence delivered as a specific ask. Text generation is the last step, not the product.
 
 5. **Distribution via both search and renegotiation.** Renegotiation (lease renewal moment) has the clearest ROI story and the highest motivation. Apartment search has higher volume. Both are valid use cases with different urgency.
+
+---
+
+## Two Products, Not One
+
+The platform is actually two distinct products serving different audiences. Recognizing the separation clarifies every engineering and product decision.
+
+**Product A — Real Rent (consumer)**
+The renter-facing negotiation tool. Audience: someone renewing their lease who wants to pay less. The question it answers: *"What should I ask for, and why?"* Every feature should be evaluated against: does this help a renter save money at lease renewal? If not, it's not MVP.
+
+**Product B — Renters Commons (infrastructure)**
+The housing intelligence platform. Audience: researchers, city housing departments, journalists, tenant unions, policy organizations, universities. The question it answers: *"What is actually happening in Chicago's rental market?"* This is the long-term data trust — the thing that produces grant revenue, city partnerships, and academic credibility.
+
+Both products are built on the same data. But they have different interfaces, different users, and different value propositions. Building them as one blurs the priorities. Phase A builds Product A. Phase B builds the infrastructure that makes Product B possible.
 
 ---
 
@@ -132,6 +152,15 @@ A continuously-running scraping infrastructure covering large buildings in Chica
 
 **Scaling to more buildings:** The pipeline is already automated. Expanding coverage is a configuration change (adding building addresses to the scrape list), not a rebuild. Priority: large residential buildings in Pilsen, Englewood, South Shore, Austin, Humboldt Park.
 
+**Housing Weather Report (UX concept):** Market conditions expressed as an instantly readable signal, not a table of numbers. Example:
+
+> **Pilsen** — Vacancy ↑ · Prices ↓ · *Negotiation strength: High*
+> **South Loop** — Inventory shrinking · Expect increases · *Negotiation strength: Low*
+
+Stocks have Bloomberg. Weather has radar. Housing has nothing. This is the consumer-facing surface of the intelligence layer.
+
+**Lease upload field extraction:** Beyond the rent amount, AI extraction of uploaded leases should capture: concessions, pet fees, parking fees, renewal increase amounts, move-in credits, application fees, utility clauses, internet requirements, lease duration, and early termination terms. These become the richest dataset in the corpus — things that never appear in listing data.
+
 ---
 
 ## Distribution
@@ -142,7 +171,7 @@ A continuously-running scraping infrastructure covering large buildings in Chica
 3. **Chicago Reader / local journalism** — the story ("founder saves $200/month by building renter AI, now making it free for everyone") is a local news story that writes itself.
 4. **Word of mouth at lease renewal time** — the product's primary trigger.
 
-**The pitch to Metropolitan Tenants Org:** "We have 2 months of data on buildings in your area. We're building a tool your members can use at lease renewal time. We don't want to charge for it. We want your members as our first users."
+**The pitch to Metropolitan Tenants Org:** Don't ask for users. Ask to co-design. "We have 2 months of data on buildings in your area. We're building a tool for renters at lease renewal time. We want your help shaping it — what questions do your members ask every day? What information do they wish they had? What would make this trustworthy enough for you to recommend?" If they help shape it, they'll advocate for it. That changes the relationship from customer to partner.
 
 ---
 
@@ -200,6 +229,19 @@ Time-series scraped listing data is not the moat. A well-funded competitor (or a
 Stack: Next.js + Vercel + Claude API + SQLite/Supabase.  
 Flow: address input form → lookup against the 44-day Chicago dataset → negotiation brief with specific dollar ask → export as PDF.  
 Scope: Do not build user accounts, map UI, or anything outside the existing 44-day dataset. The prototype's job is to generate a compelling negotiation brief. One flow, no edge cases.
+
+---
+
+## External Review — ChatGPT (2026-06-26)
+
+Rating: **9/10 for an idea-stage project.** "One of the strongest early-stage nonprofit product concepts I've read in a while." Key observations:
+
+- The founder story ($200/month saved) is the grant story. Put it in every presentation.
+- The nonprofit reasoning is a *network-effect argument*, not a moral argument. Trust produces better data. That's much stronger than "we're mission-driven."
+- Starting with Chicago is exactly right. Every successful data company begins somewhere tiny.
+- The remaining gap is evidence: demonstrate that the workflow that saved one renter $200 can reliably help many renters negotiate better outcomes.
+
+Additions incorporated from this review: Vision section, two-product framing (Real Rent vs. Renters Commons), AI intelligence framing (specific ask > letter generation), Housing Weather Report concept, expanded lease upload fields, co-design framing for MTO.
 
 ---
 

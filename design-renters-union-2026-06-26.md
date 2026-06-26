@@ -181,5 +181,19 @@ It is an attempt to build the renter-side equivalent of what landlords already h
 
 ---
 
+---
+
+## Decisions Made This Session (2026-06-26)
+
+- **Name:** Renters Commons
+- **Product tool name:** Real Rent (under consideration)
+- **Structure:** Non-profit, 501(c)(4) likely (allows advocacy)
+- **Wedge city:** Chicago, starting with lower-income neighborhoods (Pilsen, Englewood, Humboldt Park, South Shore, Austin)
+- **Domains registered:** renterscommons.org (primary), renterscommons.com (redirect) — Namecheap, order 206537909, auto-renewal ON
+- **Data sources:** Domu.com + Zillow (medium risk, HiQ precedent), avoid Apartments.com/CoStar
+- **First action:** Contact Metropolitan Tenants Organization Chicago
+
+---
+
 *Design doc generated via /office-hours on 2026-06-26.*  
 *Approach: A → B (MVP → non-profit data platform). Non-profit (501c4 likely). Wedge: Chicago lower-income neighborhoods.*

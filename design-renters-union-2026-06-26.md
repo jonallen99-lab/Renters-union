@@ -32,7 +32,7 @@ The instinct that led to the non-profit decision is correct: renters will share 
 
 ## Agreed Premises
 
-1. **The moat is time-series data at building/unit level** — listing prices accumulated over months and years, at granularity that shows how a specific landlord prices over time. Listing data in aggregate is not commodity; no one has it at this resolution. Lease uploads are an additive layer, not the foundation.
+1. **The real moat is the lease upload corpus (actual paid rent), not scraped listing data.** *(Premise revised after cross-model second opinion — see below.)* Scraped listing data is the bootstrap mechanism that gives renters something to access before the corpus exists. A funded competitor can replicate the scraping pipeline within 18 months. No one can replicate years of user-submitted actual paid rents from a trusted non-profit. Time-series listing data is still valuable and has no equivalent elsewhere at this granularity — but it's the on-ramp, not the destination.
 
 2. **Scraped listing data is the MVP.** Lease uploads come later as a network contribution mechanic (Glassdoor-style gate: upload your lease to access others' data). Cold start solved by launching with scraped data alone — the pipeline already exists.
 
@@ -180,6 +180,26 @@ This is not a startup optimizing for growth metrics. It is not a product that tr
 It is an attempt to build the renter-side equivalent of what landlords already have — and give it away to the people who need it most. The non-profit structure is not a constraint; it's the thing that makes the product trustworthy enough to actually work.
 
 ---
+
+---
+
+## Cross-Model Second Opinion (2026-06-26)
+
+Run as a structured adversarial review against all five agreed premises. Four findings:
+
+**1. Strongest version of the idea:**  
+A non-profit intelligence commons doing for renters what RealPage does for landlords. The non-profit structure is not a constraint — it's the mechanism that generates the lease upload data that makes the product irreplaceable. For-profit competitors cannot get renters to share actual lease details. The non-profit can.
+
+**2. The product is already proven:**  
+"I spent 2 months collecting Chicago rental data manually using Claude and used it to negotiate a $200/month reduction on my own lease." The product is that workflow, end-to-end, accessible to renters who can't build it themselves. This is the demo. This is the grant pitch. This is the story for MTO.
+
+**3. Premise 1 is wrong as stated (revised above):**  
+Time-series scraped listing data is not the moat. A well-funded competitor (or a PE firm backing one) can replicate the scraping infrastructure within 18 months. The moat is the lease upload corpus — actual paid rents from actual leases, submitted by renters who trust a non-profit with their sensitive data. That corpus takes years to build and cannot be bought. The scraping is the bootstrap; the corpus is the defensible position.
+
+**4. 48-hour prototype spec:**  
+Stack: Next.js + Vercel + Claude API + SQLite/Supabase.  
+Flow: address input form → lookup against the 44-day Chicago dataset → negotiation brief with specific dollar ask → export as PDF.  
+Scope: Do not build user accounts, map UI, or anything outside the existing 44-day dataset. The prototype's job is to generate a compelling negotiation brief. One flow, no edge cases.
 
 ---
 

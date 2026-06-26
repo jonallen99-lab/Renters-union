@@ -1,0 +1,185 @@
+# Renters Union — Design Doc
+**Date:** 2026-06-26  
+**Branch:** claude/office-hours-7n50z8  
+**Mode:** Startup (non-profit)  
+**Stage:** Pre-product, idea stage  
+
+---
+
+## The Problem
+
+Landlords have algorithmic pricing tools — RealPage, YieldStar — that aggregate actual occupancy and rent data across competing properties to maximize extraction. The DOJ sued RealPage. New York became the first state to ban algorithmic rent-setting tools (S.7882, late 2025). Portland and Washington State are following. These tools cost renters an estimated $70/month average nationally.
+
+Renters have nothing equivalent. StreetEasy covers NYC listings. Rentometer gives rough estimates. Zumper tracks trends. No one has: actual paid rent at the building level, accumulated over time, with an AI layer that converts it into negotiating leverage.
+
+**The founder spent two months collecting Chicago rental data manually using Claude and used it to negotiate a $200/month reduction on their own lease.** That's the proof of concept. The product is that workflow, productized and accessible to renters who don't know how to build it themselves.
+
+---
+
+## What I Noticed (Founder Signals)
+
+Strong session. Signals observed:
+- **Real problem, personal evidence** — used the tool themselves, got a result ($200/month saved), not a hypothesis
+- **Named a specific market** — Chicago, specific buildings (Solvere and 811), now expanding
+- **Accurate self-assessment** — "not a billion-dollar market cap idea but a billion-dollar impact idea" — shows clear thinking about what this is
+- **Mission alignment is the decision driver, not money** — non-profit choice came from trust and values, not inability to monetize
+- **Already has working infrastructure** — automated Windows Task Scheduler pipeline, 44 days of data, 4 buildings
+- **Strong instinct on who needs it most** — lower-income Chicago neighborhoods, large buildings, people with the most to gain on a percentage basis
+
+The instinct that led to the non-profit decision is correct: renters will share sensitive lease data with a non-profit they trust. They won't share it with a VC-backed startup they suspect will monetize it. The non-profit structure IS the moat for data quality.
+
+---
+
+## Agreed Premises
+
+1. **The moat is time-series data at building/unit level** — listing prices accumulated over months and years, at granularity that shows how a specific landlord prices over time. Listing data in aggregate is not commodity; no one has it at this resolution. Lease uploads are an additive layer, not the foundation.
+
+2. **Scraped listing data is the MVP.** Lease uploads come later as a network contribution mechanic (Glassdoor-style gate: upload your lease to access others' data). Cold start solved by launching with scraped data alone — the pipeline already exists.
+
+3. **Chicago is the wedge city.** NYC already has StreetEasy, Openigloo, and the country's strongest tenant protections. Chicago has almost nothing. The founder has 2 months of real data there.
+
+4. **The AI negotiation layer is the secret sauce.** What converts data into "$200/month saved." Data without AI is just another table of numbers.
+
+5. **Distribution via both search and renegotiation.** Renegotiation (lease renewal moment) has the clearest ROI story and the highest motivation. Apartment search has higher volume. Both are valid use cases with different urgency.
+
+---
+
+## The Landscape
+
+**Direct competitors:** Weaker than expected.
+- **StreetEasy** — listing prices, NYC only, no actual paid rent
+- **Rentometer** — rough rent comparisons, no time-series, no negotiation layer
+- **Openigloo** — Brooklyn, rent-stabilized apartments only, no lease data aggregation
+- **Apartment List / Zumper** — trend data, no building-level granularity
+
+**No one is doing:** building-level time-series listing data + actual paid rent (lease uploads) + AI negotiation assistant. The space is clearer than expected.
+
+**Regulatory tailwind:** NY banned algorithmic rent-setting (2025). Portland followed. DOJ sued RealPage. Public awareness of algorithmic rent manipulation is at an all-time high. A non-profit renter data platform is politically viable in a way it wasn't 3 years ago.
+
+**Funding landscape:** MacArthur Foundation (headquartered in Chicago) funds housing justice work. Ford Foundation, Kresge, JPMorgan Chase Community Development are all active in this space. A Chicago-based non-profit building renter data infrastructure for lower-income neighborhoods is a strong grant candidate.
+
+---
+
+## The Data Foundation (What Exists Now)
+
+- **44 days of data** on Solvere and 811 (original 2 buildings, same management company)
+- **2 additional buildings** recently added in the area
+- **~20 data points/day** across the original 2 buildings combined
+- **Tracks:** unit price changes, listing specials, days on market, unit absorption (when a unit disappears = rented)
+- **Pipeline:** automated via Windows Task Scheduler — runs daily without manual intervention
+- **Format:** living in a Claude Code project on founder's Windows desktop (needs migration to server for production)
+
+**Assessment:** Sufficient for MVP demo and grant application. Insufficient for a product renters across Chicago rely on. The methodology is proven; coverage needs to scale.
+
+---
+
+## Recommended Approach: A → B
+
+### Phase A (Now): AI Negotiation MVP — "The Scout"
+
+Use the existing 44 days of Chicago data to build the simplest possible AI negotiation tool. A user enters their building address, gets a comparison of their current rent vs. what that building has been listing at over time, sees the occupancy/absorption signal (how fast units are moving), and receives an AI-generated negotiation framework.
+
+**This is not a product launch.** It's a demo that proves the concept well enough to:
+- Show to MacArthur Foundation as a grant application
+- Show to Metropolitan Tenants Organization Chicago as a partnership pitch
+- Use to recruit a technical co-founder or first volunteer engineer
+
+**Revenue/Funding in Phase A:** Single seed grant from a Chicago community foundation ($25–75K). Enough to run the infrastructure and one part-time person.
+
+**What to build:** Web form → address lookup → market comparison → AI negotiation letter. No accounts, no database at scale. The founder's existing data as the backend.
+
+### Phase B (Funded): Public Interest Data Trust — "The Registry"
+
+A continuously-running scraping infrastructure covering large buildings in Chicago's lower-income neighborhoods (Pilsen, Englewood, South Shore, Austin, Humboldt Park). Time-series database of listing prices, unit availability, and absorption rates at building level. AI negotiation assistant. Building/landlord reviews as community layer. Lease uploads added once there's enough traffic to make the gate valuable.
+
+**Why lower-income neighborhoods first:**
+- Most to gain on a percentage basis (saving $150 on $1,100 rent = 14%)
+- Most under-documented (listing sites focus coverage on affluent areas)
+- Strongest mission story for foundation funding
+- Strongest political protection
+
+**Revenue/Funding in Phase B:** MacArthur Foundation and Ford Foundation grants ($250K–1M). Data licensing to researchers, journalists, and policy organizations (not landlords, never landlords). City of Chicago partnership potential (city wants this data for housing policy decisions). Optional renter membership ($5–10/month, voluntary).
+
+**What to build:** Scraping pipeline on cloud server, time-series database (Postgres), building-level dashboard, AI negotiation assistant, building review layer.
+
+---
+
+## Legal Considerations
+
+**Scraping public listing data:** Defensible under current federal law. *HiQ v. LinkedIn* (9th Circuit, 2022) established that scraping publicly available data does not violate the CFAA. *Van Buren v. United States* (Supreme Court, 2021) further narrowed the CFAA. The realistic risk is Terms of Service violations (civil, not criminal) leading to IP blocks and C&D letters — not criminal prosecution.
+
+**Actual paid rent data:** Cannot be scraped — it doesn't exist on any public site. Must be collected via lease uploads (user-submitted). This is clearly legal and actually produces better data.
+
+**Copyright:** Factual data (rent amounts, addresses, availability dates) is not copyrightable under *Feist Publications v. Rural Telephone* (1991). Storing analysis rather than verbatim listing pages reduces exposure further.
+
+**Non-profit status:** Does not create special scraping rights. Does create political protection — a non-profit fighting for housing justice in lower-income neighborhoods is an extremely unsympathetic defendant for any listing site to sue in 2026.
+
+**501(c)(3) vs. 501(c)(4):** If advocacy (lobbying for rent control, campaigning against algorithmic pricing legislation) is part of the mission, file as (c)(4). Donations are not tax-deductible under (c)(4), but advocacy rights are full. A (c)(3) is limited to educational/charitable activities and cannot lobby. Given the political context (NY ban, DOJ action), (c)(4) is likely the right structure.
+
+**Risk mitigation:** Scrape only public pages (no login-required data). Rate-limit aggressively. Store analysis, not raw listings. Get a housing/tech lawyer to review before launch — one hour of legal advice now is worth 100 hours later. EFF has defended public-interest scrapers before.
+
+---
+
+## Architecture Notes
+
+**Current state:** Windows Task Scheduler running a Claude Code project daily on the founder's desktop.
+
+**What needs to change for production:**
+1. Move scraping pipeline to a cloud server (Digital Ocean $10/month, or AWS). The desktop going offline or restarting breaks data collection continuity.
+2. Structured database (Postgres or SQLite to start) with building/unit as first-class entities and time as the primary dimension.
+3. Simple web frontend for the negotiation tool (Next.js or plain HTML/JS to start).
+4. The Claude API stays as the AI negotiation layer — that architecture is proven.
+
+**Scaling to more buildings:** The pipeline is already automated. Expanding coverage is a configuration change (adding building addresses to the scrape list), not a rebuild. Priority: large residential buildings in Pilsen, Englewood, South Shore, Austin, Humboldt Park.
+
+---
+
+## Distribution
+
+**Primary channels:**
+1. **Metropolitan Tenants Organization** (Chicago) — the city's main tenant advocacy organization. They have members who are exactly this product's users. A partnership here solves cold-start distribution.
+2. **Foundation networks** — grantees of MacArthur and Ford in housing justice tend to know each other and share tools.
+3. **Chicago Reader / local journalism** — the story ("founder saves $200/month by building renter AI, now making it free for everyone") is a local news story that writes itself.
+4. **Word of mouth at lease renewal time** — the product's primary trigger.
+
+**The pitch to Metropolitan Tenants Org:** "We have 2 months of data on buildings in your area. We're building a tool your members can use at lease renewal time. We don't want to charge for it. We want your members as our first users."
+
+---
+
+## Open Questions
+
+1. **501(c)(3) vs. 501(c)(4)?** Need a lawyer conversation before filing. Key question: is advocacy part of the mission?
+2. **What listing sources feed the scraper?** Craigslist, Zillow, Apartments.com — which ones? ToS exposure varies by source.
+3. **Data storage format?** What format does the current pipeline produce? (CSV, JSON, SQLite?) Determines migration complexity.
+4. **Is there a co-founder?** Building this alone as a non-profit is very hard. The combination of technical pipeline + grant writing + tenant org relationships is more than one person.
+5. **City of Chicago partnership?** Chicago's Department of Housing has data that could augment the scraping. Worth a conversation early.
+
+---
+
+## The Assignment
+
+One concrete action this week — not a strategy, an action:
+
+**Contact Metropolitan Tenants Organization Chicago.** Find the executive director (currently connected to housing justice orgs in Chicago), send a 3-paragraph email: (1) what you built, (2) what you saved on your own rent, (3) ask for 20 minutes to show them the tool.
+
+That conversation will tell you more about product-market fit than another month of building.
+
+After that:
+- [ ] Consult a lawyer: 501(c)(3) vs. 501(c)(4) decision
+- [ ] Move scraping pipeline from Windows desktop to a cloud server
+- [ ] Add 5-10 large buildings in Pilsen or Englewood to the pipeline
+- [ ] Build the simplest possible negotiation web demo on existing data
+- [ ] Research MacArthur Foundation housing grant application timeline
+
+---
+
+## What This Is Not
+
+This is not a startup optimizing for growth metrics. It is not a product that treats renter data as an asset to monetize. It is not competing with Zillow.
+
+It is an attempt to build the renter-side equivalent of what landlords already have — and give it away to the people who need it most. The non-profit structure is not a constraint; it's the thing that makes the product trustworthy enough to actually work.
+
+---
+
+*Design doc generated via /office-hours on 2026-06-26.*  
+*Approach: A → B (MVP → non-profit data platform). Non-profit (501c4 likely). Wedge: Chicago lower-income neighborhoods.*
